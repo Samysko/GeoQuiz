@@ -10,6 +10,8 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity {
     Button mTrueButton;
     Button mFalseButton;
+    public static final int X_OFFSET = 0;
+    public static final int Y_OFFSET = 200;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,9 +30,9 @@ public class MainActivity extends AppCompatActivity {
 
                 //CHALLENGE: Brief message to the final user that indicates the correct answer
                 //at the top center of the activity
-                Toast toast = Toast.makeText(MainActivity.this, R.string.true_button,
+                Toast toast = Toast.makeText(MainActivity.this, R.string.correct,
                         Toast.LENGTH_LONG);
-                toast.setGravity(Gravity.TOP, Gravity.AXIS_X_SHIFT, Gravity.AXIS_Y_SHIFT);
+                toast.setGravity(Gravity.TOP, X_OFFSET,Y_OFFSET);
                 toast.show();
             }
         });
@@ -47,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
                //at the top center of the activity
                Toast toast = Toast.makeText(MainActivity.this,
                        R.string.incorrect, Toast.LENGTH_LONG);
-               toast.setGravity(Gravity.TOP, Gravity.CENTER_HORIZONTAL, Gravity.CENTER_VERTICAL);
+               toast.setGravity(Gravity.TOP, X_OFFSET, Y_OFFSET);
                toast.show();
 
            }
