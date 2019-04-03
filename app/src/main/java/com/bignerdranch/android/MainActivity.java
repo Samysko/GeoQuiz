@@ -23,13 +23,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v){
                 Toast.makeText(MainActivity.this,
                         R.string.correct, Toast.LENGTH_LONG).show();
-
-//                CHALLENGE: Brief message to the final user that indicates the correct answer
-//                at the top center of the activity
-//                Toast toast = Toast.makeText(MainActivity.this, R.string.true_button,
-//                        Toast.LENGTH_LONG);
-//                toast.setGravity(Gravity.TOP, Gravity.AXIS_X_SHIFT, Gravity.AXIS_Y_SHIFT);
-//                toast.show();
             }
         });
 
