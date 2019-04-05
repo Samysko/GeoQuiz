@@ -6,12 +6,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ImageButton;
 
 public class MainActivity extends AppCompatActivity {
     private Button mTrueButton;
     private Button mFalseButton;
-    private Button mNextButton;
-    private Button mPreviousButton;
+    private ImageButton mNextImageButton;
+    private ImageButton mPreviousImageButton;
     private TextView mQuestionTextView;
 
     Question[] mQuestionBank = {new Question(R.string.question_australia, true),
@@ -39,8 +40,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //Instance of the next button with its own listener
-        mNextButton = findViewById(R.id.next_button);
-        mNextButton.setOnClickListener(new View.OnClickListener() {
+        mNextImageButton = findViewById(R.id.next_image_button);
+        mNextImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 updateIndex(true);
@@ -49,8 +50,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //Instance of the back button with its own listener
-        mPreviousButton = findViewById(R.id.previous_button);
-        mPreviousButton.setOnClickListener(new View.OnClickListener() {
+        mPreviousImageButton = findViewById(R.id.previous_image_button);
+        mPreviousImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 updateIndex(false);
