@@ -5,6 +5,7 @@
     <string name="correct">Correct!</string>
     <string name="incorrect">Incorrect!</string>
     <string name="next_button">Next</string>
+    <string name="previous_button">Prev</string>
 
     <!--This are the questions for the quiz-->
     <string name="question_australia">Canberra is the capital of Australia</string>

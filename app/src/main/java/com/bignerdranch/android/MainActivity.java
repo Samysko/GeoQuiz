@@ -11,6 +11,7 @@ public class MainActivity extends AppCompatActivity {
     private Button mTrueButton;
     private Button mFalseButton;
     private Button mNextButton;
+    private Button mPreviousButton;
     private TextView mQuestionTextView;
 
     Question[] mQuestionBank = {new Question(R.string.question_australia, true),
@@ -32,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         mQuestionTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.length;
+                updateIndex(true);
                 updateQuestion();
             }
         });
@@ -42,7 +43,17 @@ public class MainActivity extends AppCompatActivity {
         mNextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.length;
+                updateIndex(true);
+                updateQuestion();
+            }
+        });
+
+        //Instance of the back button with its own listener
+        mPreviousButton = findViewById(R.id.previous_button);
+        mPreviousButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateIndex(false);
                 updateQuestion();
             }
         });
@@ -86,5 +97,15 @@ public class MainActivity extends AppCompatActivity {
         }
 
         Toast.makeText(this, messageResId, Toast.LENGTH_LONG).show();
+    }
+
+    public void updateIndex(boolean userPressedNext){
+        if(userPressedNext){
+            mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.length;
+        }else{
+            if(mCurrentIndex > 0){
+                mCurrentIndex = (mCurrentIndex - 1) % mQuestionBank.length;
+            }
+        }
     }
 }
