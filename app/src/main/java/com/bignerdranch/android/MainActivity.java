@@ -8,6 +8,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
     public static final String TAG = "MainActivity";
     public static final String KEY_INDEX = "index";
@@ -26,18 +28,17 @@ public class MainActivity extends AppCompatActivity {
     };
 
     private int mCurrentIndex = 0;
-
+    ArrayList<Integer> answeredQuestions = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Log.d(TAG, "onCreate(Bundle) called");
 
         if(savedInstanceState != null){
             mCurrentIndex = savedInstanceState.getInt(KEY_INDEX, 0);
         }
-
-        Log.d(TAG, "onCreate(Bundle) called");
 
         mQuestionTextView = findViewById(R.id.question_text_view);
 
@@ -51,45 +52,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //Instance of the true button with its own listener
-        mTrueButton = findViewById(R.id.true_button);
-        mTrueButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                checkAnswer(true);
-            }
-        });
-
-        //Instance of the false button with its own listener
-        mFalseButton = findViewById(R.id.false_button);
-        mFalseButton.setOnClickListener(new View.OnClickListener(){
-           @Override
-            public void onClick(View v){
-               checkAnswer(false);
-           }
-        });
-
         updateQuestion();
-    }
-
-    //Method to update the current question inside the QuestionTextView
-    public void updateQuestion(){
-        int question = mQuestionBank[mCurrentIndex].getTextResId();
-        mQuestionTextView.setText(question);
-    }
-
-    //Method to check whether the user's answer was correct
-    public void checkAnswer(Boolean userPressedTrue){
-        int messageResId;
-        boolean answerIsTrue = mQuestionBank[mCurrentIndex].isAnswerTrue();
-
-        if(userPressedTrue == answerIsTrue){
-            messageResId = R.string.correct;
-        }else{
-            messageResId = R.string.incorrect;
-        }
-
-        Toast.makeText(this, messageResId, Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -134,4 +97,60 @@ public class MainActivity extends AppCompatActivity {
         Log.i(TAG, "onSaveInstanceState(Bundle outState)");
         outState.putInt(KEY_INDEX, mCurrentIndex);
     }
+
+    //Method to update the current question inside the QuestionTextView
+    public void updateQuestion(){
+        int question = mQuestionBank[mCurrentIndex].getTextResId();
+        mQuestionTextView.setText(question);
+
+        checkIfQuestionIsAnswered();
+    }
+
+    //Method to check whether the user's answer was correct
+    public void checkAnswer(Boolean userPressedTrue){
+        int messageResId;
+        boolean answerIsTrue = mQuestionBank[mCurrentIndex].isAnswerTrue();
+
+        if(userPressedTrue == answerIsTrue){
+            messageResId = R.string.correct;
+        }else{
+            messageResId = R.string.incorrect;
+        }
+
+        Toast.makeText(this, messageResId, Toast.LENGTH_LONG).show();
+    }
+
+    //Method to check if a question was previously answered,
+    //if yes true and false buttons will be disabled
+    public void checkIfQuestionIsAnswered(){
+        mTrueButton = findViewById(R.id.true_button);
+        mFalseButton = findViewById(R.id.false_button);
+
+        if(answeredQuestions.contains(mCurrentIndex)){
+            //If the question is previously answered it will disable the buttons
+            mTrueButton.setEnabled(false);
+            mFalseButton.setEnabled(false);
+
+        }else{
+            //Instance of the true button with its own listener
+            mTrueButton.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View v){
+                    checkAnswer(true);
+                    answeredQuestions.add(mCurrentIndex);
+                }
+            });
+
+            //Instance of the false button with its own listener
+            mFalseButton.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View v){
+                    checkAnswer(false);
+                    answeredQuestions.add(mCurrentIndex);
+                }
+            });
+
+        }
+    }
+
 }
