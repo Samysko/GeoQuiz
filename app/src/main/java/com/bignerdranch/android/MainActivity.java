@@ -1,5 +1,6 @@
 package com.bignerdranch.android;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,6 +16,7 @@ public class MainActivity extends AppCompatActivity {
     private Button mTrueButton;
     private Button mFalseButton;
     private Button mNextButton;
+    private Button mCheatButton;
     private TextView mQuestionTextView;
 
     Question[] mQuestionBank = {new Question(R.string.question_australia, true),
@@ -40,9 +42,12 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "onCreate(Bundle) called");
 
         mQuestionTextView = findViewById(R.id.question_text_view);
-
-        //Instance of the next button with its own listener
+        mCheatButton = findViewById(R.id.cheat_button);
         mNextButton = findViewById(R.id.next_button);
+        mTrueButton = findViewById(R.id.true_button);
+        mFalseButton = findViewById(R.id.false_button);
+
+        //Set the listener to the next button
         mNextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -51,8 +56,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //Instance of the true button with its own listener
-        mTrueButton = findViewById(R.id.true_button);
+        //Set the listener to the true button
         mTrueButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
@@ -60,13 +64,21 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //Instance of the false button with its own listener
-        mFalseButton = findViewById(R.id.false_button);
+        //Set the listener to the false button
         mFalseButton.setOnClickListener(new View.OnClickListener(){
            @Override
             public void onClick(View v){
                checkAnswer(false);
            }
+        });
+
+        //Set the listener to the cheat button
+        mCheatButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, CheatActivity.class);
+                startActivity(intent);
+            }
         });
 
         updateQuestion();
