@@ -9,7 +9,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 public class CheatActivity extends AppCompatActivity {
-    private static String QUESTION_ANSWE_EXTRA_KEY = "com_bignerdranch_android_question_answer";
+    private static String EXTRA_ANSWER_IS_TRUE = "com.bignerdranch.android.answer_is_true";
+    private static String EXTRA_ANSWER_SHOWN = "com.bignerdranch.android.answer_shown";
 
     Button mAnswerButton;
     TextView mAnswerTextView;
@@ -21,7 +22,7 @@ public class CheatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cheat);
 
-        mAnswerIsTrue = getIntent().getBooleanExtra(QUESTION_ANSWE_EXTRA_KEY, false);
+        mAnswerIsTrue = getIntent().getBooleanExtra(EXTRA_ANSWER_IS_TRUE, false);
 
         mAnswerButton = findViewById(R.id.answer_button);
         mAnswerTextView = findViewById(R.id.answer_text_view);
@@ -30,10 +31,11 @@ public class CheatActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(mAnswerIsTrue){
-                    mAnswerTextView.setText(R.string.true_button;
+                    mAnswerTextView.setText(R.string.true_button);
                 }else{
                     mAnswerTextView.setText(R.string.false_button);
                 }
+                setAnswerShownResult(true);
             }
         });
 
@@ -41,7 +43,18 @@ public class CheatActivity extends AppCompatActivity {
 
     public static Intent newIntent(Context packageContext, boolean answerIsTrue ){
         Intent intent = new Intent(packageContext, CheatActivity.class);
-        intent.putExtra(QUESTION_ANSWE_EXTRA_KEY, answerIsTrue);
+        intent.putExtra(EXTRA_ANSWER_IS_TRUE, answerIsTrue);
         return intent;
     }
+
+    public static boolean wasAnswerShown(Intent result){
+        return result.getBooleanExtra(EXTRA_ANSWER_SHOWN, false);
+    }
+
+    public void setAnswerShownResult(boolean isAnswerShown){
+        Intent data = new Intent();
+        data.putExtra(EXTRA_ANSWER_SHOWN, isAnswerShown);
+        setResult(RESULT_OK, data);
+    }
+
 }

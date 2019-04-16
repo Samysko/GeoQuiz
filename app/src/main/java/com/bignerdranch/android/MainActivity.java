@@ -1,6 +1,7 @@
 package com.bignerdranch.android;
 
 import android.content.Intent;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity {
     public static final String TAG = "MainActivity";
     public static final String KEY_INDEX = "index";
+    public static final int CHEAT_CODE = 0;
 
     private Button mTrueButton;
     private Button mFalseButton;
@@ -28,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     };
 
     private int mCurrentIndex = 0;
+    private boolean mIsCheater;
 
 
     @Override
@@ -53,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.length;
                 updateQuestion();
+                mIsCheater = false;
             }
         });
 
@@ -79,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
                 boolean answerIsTrue = mQuestionBank[mCurrentIndex].isAnswerTrue();
                 Intent intent =
                         CheatActivity.newIntent(MainActivity.this, answerIsTrue);
-                startActivity(intent);
+                startActivityForResult(intent, CHEAT_CODE);
             }
         });
 
@@ -97,10 +101,15 @@ public class MainActivity extends AppCompatActivity {
         int messageResId;
         boolean answerIsTrue = mQuestionBank[mCurrentIndex].isAnswerTrue();
 
-        if(userPressedTrue == answerIsTrue){
-            messageResId = R.string.correct;
+        if(mIsCheater){
+            messageResId = R.string.judgment_toast;
+
         }else{
-            messageResId = R.string.incorrect;
+            if(userPressedTrue == answerIsTrue){
+                messageResId = R.string.correct;
+            }else{
+                messageResId = R.string.incorrect;
+            }
         }
 
         Toast.makeText(this, messageResId, Toast.LENGTH_LONG).show();
@@ -147,5 +156,21 @@ public class MainActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
         Log.i(TAG, "onSaveInstanceState(Bundle outState)");
         outState.putInt(KEY_INDEX, mCurrentIndex);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if(resultCode != RESULT_OK){
+            return;
+        }
+
+        if(requestCode == CHEAT_CODE){
+            if(data == null){
+                return;
+            }
+            mIsCheater = CheatActivity.wasAnswerShown(data);
+
+        }
+
     }
 }
