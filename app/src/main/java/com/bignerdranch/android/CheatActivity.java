@@ -11,11 +11,13 @@ import android.widget.TextView;
 public class CheatActivity extends AppCompatActivity {
     private static String EXTRA_ANSWER_IS_TRUE = "com.bignerdranch.android.answer_is_true";
     private static String EXTRA_ANSWER_SHOWN = "com.bignerdranch.android.answer_shown";
+    private static String KEY_ANSWER_WAS_SHOWN = "answer was shown";
 
     Button mAnswerButton;
     TextView mAnswerTextView;
 
     boolean mAnswerIsTrue;
+    boolean mIsAnswerShown;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,15 +29,17 @@ public class CheatActivity extends AppCompatActivity {
         mAnswerButton = findViewById(R.id.answer_button);
         mAnswerTextView = findViewById(R.id.answer_text_view);
 
+        if(savedInstanceState != null){
+            mIsAnswerShown = savedInstanceState.getBoolean(KEY_ANSWER_WAS_SHOWN, false);
+            if(mIsAnswerShown){
+                showAnswer();
+            }
+        }
+
         mAnswerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mAnswerIsTrue){
-                    mAnswerTextView.setText(R.string.true_button);
-                }else{
-                    mAnswerTextView.setText(R.string.false_button);
-                }
-                setAnswerShownResult(true);
+                showAnswer();
             }
         });
 
@@ -57,4 +61,19 @@ public class CheatActivity extends AppCompatActivity {
         setResult(RESULT_OK, data);
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(KEY_ANSWER_WAS_SHOWN, mIsAnswerShown);
+    }
+
+    public void showAnswer(){
+        if(mAnswerIsTrue){
+            mAnswerTextView.setText(R.string.true_button);
+        }else{
+            mAnswerTextView.setText(R.string.false_button);
+        }
+        setAnswerShownResult(true);
+        mIsAnswerShown = true;
+    }
 }
