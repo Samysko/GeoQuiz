@@ -13,6 +13,7 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity {
     public static final String TAG = "MainActivity";
     public static final String KEY_INDEX = "index";
+    public static final String KEY_IS_CHEATER = "is cheater";
     public static final int CHEAT_CODE = 0;
 
     private Button mTrueButton;
@@ -40,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
         if(savedInstanceState != null){
             mCurrentIndex = savedInstanceState.getInt(KEY_INDEX, 0);
+            mIsCheater = savedInstanceState.getBoolean(KEY_IS_CHEATER, false);
         }
 
         Log.d(TAG, "onCreate(Bundle) called");
@@ -156,6 +158,7 @@ public class MainActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
         Log.i(TAG, "onSaveInstanceState(Bundle outState)");
         outState.putInt(KEY_INDEX, mCurrentIndex);
+        outState.putBoolean(KEY_IS_CHEATER, mIsCheater);
     }
 
     @Override
