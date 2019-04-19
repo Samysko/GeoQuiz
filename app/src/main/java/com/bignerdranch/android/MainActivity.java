@@ -10,10 +10,14 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 public class MainActivity extends AppCompatActivity {
     public static final String TAG = "MainActivity";
     public static final String KEY_INDEX = "index";
     public static final String KEY_IS_CHEATER = "is cheater";
+    public static final String KEY_CHEATED_QUESTIONS_LIST = "cheated question list";
     public static final int CHEAT_CODE = 0;
 
     private Button mTrueButton;
@@ -32,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
 
     private int mCurrentIndex = 0;
     private boolean mIsCheater;
+    private ArrayList<Boolean> mCheatedQuestionsList = new ArrayList<>();
 
 
     @Override
@@ -42,6 +47,9 @@ public class MainActivity extends AppCompatActivity {
         if(savedInstanceState != null){
             mCurrentIndex = savedInstanceState.getInt(KEY_INDEX, 0);
             mIsCheater = savedInstanceState.getBoolean(KEY_IS_CHEATER, false);
+            mCheatedQuestionsList = fillBooleanArrayListFromBooleanArray(
+                    savedInstanceState.getBooleanArray(KEY_CHEATED_QUESTIONS_LIST));
+
         }
 
         Log.d(TAG, "onCreate(Bundle) called");
@@ -103,15 +111,18 @@ public class MainActivity extends AppCompatActivity {
         int messageResId;
         boolean answerIsTrue = mQuestionBank[mCurrentIndex].isAnswerTrue();
 
-        if(mIsCheater){
+        if(mCheatedQuestionsList.get(mCurrentIndex)){
             messageResId = R.string.judgment_toast;
 
         }else{
             if(userPressedTrue == answerIsTrue){
                 messageResId = R.string.correct;
+
             }else{
                 messageResId = R.string.incorrect;
+
             }
+
         }
 
         Toast.makeText(this, messageResId, Toast.LENGTH_LONG).show();
@@ -159,6 +170,8 @@ public class MainActivity extends AppCompatActivity {
         Log.i(TAG, "onSaveInstanceState(Bundle outState)");
         outState.putInt(KEY_INDEX, mCurrentIndex);
         outState.putBoolean(KEY_IS_CHEATER, mIsCheater);
+        outState.putBooleanArray(KEY_CHEATED_QUESTIONS_LIST, getBooleanArray(mCheatedQuestionsList));
+
     }
 
     @Override
@@ -172,8 +185,28 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
             mIsCheater = CheatActivity.wasAnswerShown(data);
-
+            mCheatedQuestionsList.add(mCurrentIndex, mIsCheater);
         }
 
+    }
+
+    private boolean[] getBooleanArray(ArrayList<Boolean> booleanArrayList){
+        boolean[] booleanArray = new boolean[booleanArrayList.size()];
+
+        for(int i = 0; i < booleanArray.length; i++){
+            booleanArray[i] = booleanArrayList.get(i);
+        }
+
+        return booleanArray;
+    }
+
+    private ArrayList<Boolean> fillBooleanArrayListFromBooleanArray(boolean[] booleans){
+        ArrayList<Boolean> booleanArrayList = new ArrayList<>();
+
+        for(int i = 0; i < booleans.length; i++){
+            booleanArrayList.add(i, booleans[i]);
+        }
+
+        return booleanArrayList;
     }
 }
