@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -40,20 +41,25 @@ public class CheatActivity extends AppCompatActivity {
                 }
                 setAnswerShownResult(true);
 
-                int cx = mAnswerButton.getWidth() / 2;
-                int cy = mAnswerButton.getHeight() / 2;
-                float radius = mAnswerButton.getWidth();
-                Animator anim = ViewAnimationUtils
-                        .createCircularReveal(mAnswerButton, cx, cy, radius, 0);
-                anim.addListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        super.onAnimationEnd(animation);
-                        mAnswerButton.setVisibility(View.INVISIBLE);
-                    }
-                });
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+                    int cx = mAnswerButton.getWidth() / 2;
+                    int cy = mAnswerButton.getHeight() / 2;
+                    float radius = mAnswerButton.getWidth();
+                    Animator anim = ViewAnimationUtils
+                            .createCircularReveal(mAnswerButton, cx, cy, radius, 0);
+                    anim.addListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            super.onAnimationEnd(animation);
+                            mAnswerButton.setVisibility(View.INVISIBLE);
+                        }
+                    });
 
-                anim.start();
+                    anim.start();
+                }else{
+                    mAnswerButton.setVisibility(View.INVISIBLE);
+                }
+
             }
         });
 
