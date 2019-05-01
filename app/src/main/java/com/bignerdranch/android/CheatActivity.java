@@ -15,9 +15,12 @@ import android.widget.TextView;
 public class CheatActivity extends AppCompatActivity {
     private static String EXTRA_ANSWER_IS_TRUE = "com.bignerdranch.android.answer_is_true";
     private static String EXTRA_ANSWER_SHOWN = "com.bignerdranch.android.answer_shown";
+    private static String ACTUAL_API_DESRIPTION = String.format("API level %s",
+            Integer.toString(Build.VERSION.SDK_INT));
 
     Button mAnswerButton;
     TextView mAnswerTextView;
+    TextView mApiTextView;
 
     boolean mAnswerIsTrue;
 
@@ -30,6 +33,9 @@ public class CheatActivity extends AppCompatActivity {
 
         mAnswerButton = findViewById(R.id.answer_button);
         mAnswerTextView = findViewById(R.id.answer_text_view);
+        mApiTextView = findViewById(R.id.api_level_text_view);
+        
+        mApiTextView.setText(ACTUAL_API_DESRIPTION);
 
         mAnswerButton.setOnClickListener(new View.OnClickListener() {
             @Override
